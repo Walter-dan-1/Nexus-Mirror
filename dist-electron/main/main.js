@@ -8,10 +8,13 @@
 import { app, BrowserWindow } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { registerSystemHandlers } from "../ipc/system.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 let mainWindow = null;
-function createWindow() {
+function createMainWindow() {
+    const preloadPath = path.join(__dirname, "../preload/preload.js");
+    console.log("Preload Path:", preloadPath);
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 850,
@@ -20,28 +23,35 @@ function createWindow() {
         title: "Nexus Mirror",
         autoHideMenuBar: true,
         show: false,
+        backgroundColor: "#111827",
         webPreferences: {
-            preload: path.join(__dirname, "../preload/preload.js"),
+            preload: preloadPath,
             contextIsolation: true,
-            nodeIntegration: false
+            nodeIntegration: false,
+            sandbox: false
         }
     });
-    mainWindow.once("ready-to-show", () => {
-        mainWindow?.show();
-    });
-    if (process.env.NODE_ENV === "development") {
+    const isDev = process.env.NODE_ENV === "development";
+    if (isDev) {
         mainWindow.loadURL("http://localhost:5173");
         mainWindow.webContents.openDevTools();
     }
     else {
         mainWindow.loadFile(path.join(__dirname, "../../dist/index.html"));
     }
+    mainWindow.once("ready-to-show", () => {
+        mainWindow?.show();
+    });
+    mainWindow.on("closed", () => {
+        mainWindow = null;
+    });
 }
 app.whenReady().then(() => {
-    createWindow();
+    registerSystemHandlers();
+    createMainWindow();
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
+            createMainWindow();
         }
     });
 });
