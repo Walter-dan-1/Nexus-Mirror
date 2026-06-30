@@ -9,21 +9,22 @@ import { app, BrowserWindow } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { registerSystemHandlers } from "../ipc/system.js";
+import { registerWindowHandlers } from "../ipc/window.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 let mainWindow = null;
 function createMainWindow() {
     const preloadPath = path.join(__dirname, "../preload/preload.js");
-    console.log("Preload Path:", preloadPath);
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 850,
         minWidth: 1100,
         minHeight: 700,
-        title: "Nexus Mirror",
+        frame: false,
+        titleBarStyle: "hidden",
+        backgroundColor: "#111827",
         autoHideMenuBar: true,
         show: false,
-        backgroundColor: "#111827",
         webPreferences: {
             preload: preloadPath,
             contextIsolation: true,
@@ -31,6 +32,7 @@ function createMainWindow() {
             sandbox: false
         }
     });
+    registerWindowHandlers(mainWindow);
     const isDev = process.env.NODE_ENV === "development";
     if (isDev) {
         mainWindow.loadURL("http://localhost:5173");

@@ -1,8 +1,15 @@
+/**
+ * =====================================================
+ * Nexus Mirror
+ * File: preload.ts
+ * Purpose: Secure Electron Bridge
+ * =====================================================
+ */
 import { contextBridge, ipcRenderer } from "electron";
-console.log("✅ PRELOAD EXECUTED");
-const api = {
-    getAppInfo: () => ipcRenderer.invoke("system:getAppInfo")
-};
-contextBridge.exposeInMainWorld("nexus", api);
-console.log("✅ API EXPOSED");
+contextBridge.exposeInMainWorld("nexus", {
+    getAppInfo: () => ipcRenderer.invoke("system:getAppInfo"),
+    minimizeWindow: () => ipcRenderer.invoke("window:minimize"),
+    maximizeWindow: () => ipcRenderer.invoke("window:maximize"),
+    closeWindow: () => ipcRenderer.invoke("window:close")
+});
 //# sourceMappingURL=preload.js.map
