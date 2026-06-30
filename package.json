@@ -1,11 +1,16 @@
 {
   "name": "nexus-mirror",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Professional screen sharing and game controller platform.",
   "type": "module",
+  "main": "dist-electron/main/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "concurrently \"npm:dev:renderer\" \"npm:dev:electron\"",
+    "dev:renderer": "vite",
+    "dev:electron": "npm run build:electron && wait-on tcp:5173 && cross-env NODE_ENV=development electron .",
+    "build": "tsc -b && npm run build:electron && vite build",
+    "build:electron": "tsc -p tsconfig.electron.json",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -19,12 +24,18 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
+    "concurrently": "^10.0.3",
+    "cross-env": "^10.1.0",
+    "electron": "^42.5.1",
+    "electron-builder": "^26.15.3",
     "eslint": "^10.5.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.6.0",
+    "tsx": "^4.20.5",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.61.0",
-    "vite": "^8.1.0"
+    "vite": "^8.1.0",
+    "wait-on": "^9.0.10"
   }
 }
