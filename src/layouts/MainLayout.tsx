@@ -1,21 +1,25 @@
 import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
 import Dashboard from "../components/Dashboard";
+import TitleBar from "../components/TitleBar";
 
 export default function MainLayout() {
-  return (
-    <div className="h-screen flex">
 
-      <Sidebar />
+    return (
 
-      <div className="flex flex-col flex-1">
+        <div className="h-screen flex flex-col">
 
-        <Header />
+            <TitleBar/>
 
-        <Dashboard />
+            <div className="flex flex-1">
 
-      </div>
+                <Sidebar/>
 
-    </div>
-  );
+                <Dashboard/>
+
+            </div>
+
+        </div>
+
+    );
+
 }

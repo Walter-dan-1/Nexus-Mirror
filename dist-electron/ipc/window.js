@@ -2,7 +2,6 @@
  * =====================================================
  * Nexus Mirror
  * File: window.ts
- * Purpose: Window IPC Handlers
  * =====================================================
  */
 import { ipcMain } from "electron";
@@ -20,6 +19,9 @@ export function registerWindowHandlers(window) {
     });
     ipcMain.handle("window:close", () => {
         window.close();
+    });
+    ipcMain.handle("window:isMaximized", () => {
+        return window.isMaximized();
     });
 }
 //# sourceMappingURL=window.js.map

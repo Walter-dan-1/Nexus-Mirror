@@ -6,14 +6,6 @@ type AppInfo = {
   platform: string;
 };
 
-declare global {
-  interface Window {
-    nexus: {
-      getAppInfo: () => Promise<AppInfo>;
-    };
-  }
-}
-
 export default function Dashboard() {
   const [appInfo, setAppInfo] = useState<AppInfo>({
     name: "Loading...",
@@ -23,18 +15,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function load() {
-      try {
-        const info = await window.nexus.getAppInfo();
-        setAppInfo(info);
-      } catch (error) {
-        console.error(error);
-
-        setAppInfo({
-          name: "IPC Error",
-          version: "-",
-          platform: "-"
-        });
-      }
+      const info = await window.nexus.getAppInfo();
+      setAppInfo(info);
     }
 
     load();
@@ -45,6 +27,10 @@ export default function Dashboard() {
       <h1 className="text-4xl font-bold">
         Welcome to {appInfo.name}
       </h1>
+
+      <p className="mt-2 text-slate-400">
+        Professional Screen Sharing & Controller Platform
+      </p>
 
       <div className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-6">
         <p><strong>Application:</strong> {appInfo.name}</p>

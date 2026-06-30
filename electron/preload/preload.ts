@@ -2,20 +2,23 @@
  * =====================================================
  * Nexus Mirror
  * File: preload.ts
- * Purpose: Secure Electron Bridge
  * =====================================================
  */
 
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("nexus", {
-  getAppInfo: () => ipcRenderer.invoke("system:getAppInfo"),
 
-  minimizeWindow: () => ipcRenderer.invoke("window:minimize"),
+    getAppInfo: () => ipcRenderer.invoke("system:getAppInfo"),
 
-  maximizeWindow: () => ipcRenderer.invoke("window:maximize"),
+    minimizeWindow: () => ipcRenderer.invoke("window:minimize"),
 
-  closeWindow: () => ipcRenderer.invoke("window:close")
+    maximizeWindow: () => ipcRenderer.invoke("window:maximize"),
+
+    closeWindow: () => ipcRenderer.invoke("window:close"),
+
+    isMaximized: () => ipcRenderer.invoke("window:isMaximized")
+
 });
 
 export {};
